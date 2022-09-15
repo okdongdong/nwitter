@@ -6,11 +6,17 @@ import Router from "./Router";
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [userInfo, setUserInfo] = useState(null);
 
   useEffect(() => {
     onAuthStateChanged(fbAuth, (user) => {
-      if (user) setIsLoggedIn(true);
-      else setIsLoggedIn(false);
+      if (user) {
+        setIsLoggedIn(true);
+        setUserInfo(user);
+      } else {
+        setIsLoggedIn(false);
+        setUserInfo(null);
+      }
 
       setLoading(false);
     });
@@ -18,7 +24,7 @@ function App() {
 
   return (
     <div>
-      {loading ? `loading...` : <Router isLoggedIn={isLoggedIn} />}
+      {loading ? `loading...` : <Router isLoggedIn={isLoggedIn} userInfo={userInfo} />}
       <footer>&copy; {new Date().getFullYear()} Nwitter</footer>
     </div>
   );

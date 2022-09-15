@@ -5,12 +5,12 @@ import Auth from "./routes/Auth";
 import Home from "./routes/Home";
 import Profile from "./routes/Profile";
 
-export default function Router({ isLoggedIn }) {
+export default function Router({ isLoggedIn, userInfo }) {
   return (
     <BrowserRouter>
       <Navigation />
       <Routes>
-        <Route path="/" element={isLoggedIn ? <Home /> : <Auth />} />
+        <Route path="/" element={isLoggedIn ? <Home userInfo={userInfo} /> : <Auth />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
