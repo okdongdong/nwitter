@@ -1,6 +1,7 @@
 import { deleteDoc, doc, updateDoc } from "firebase/firestore";
+import { deleteObject, ref } from "firebase/storage";
 import React, { useState } from "react";
-import { fbStore } from "../fb";
+import { fbStorage, fbStore } from "../fb";
 
 export default function Nweet({ nweet, isOwner }) {
   const [editing, setEditing] = useState(false);
@@ -9,7 +10,13 @@ export default function Nweet({ nweet, isOwner }) {
   const deleteNweet = async () => {
     const ok = window.confirm("Are you sure you want to delete this Nweet?");
 
-    if (ok) await deleteDoc(doc(fbStore, "nweets", nweet.id));
+    if (ok) {
+      await deleteDoc(doc(fbStore, "nweets", nweet.id));
+      if (nweet.attachmentUrl) {
+        const deleteRef = ref(fbStorage, nweet.attachmentUrl);
+        await deleteObject(deleteRef);
+      }
+    }
   };
 
   const toggleEditing = () => setEditing((prev) => !prev);
@@ -38,6 +45,7 @@ export default function Nweet({ nweet, isOwner }) {
       ) : (
         <>
           <h4>{nweet.nweet}</h4>
+          {nweet.attachmentUrl && <img src={nweet.attachmentUrl} alt="nweetImage" />}
           <span>{nweet.createdAt.toDate().toLocaleString()}</span>
           {isOwner && (
             <>
