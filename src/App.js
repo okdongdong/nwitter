@@ -8,6 +8,10 @@ function App() {
   const [loading, setLoading] = useState(true);
   const [userInfo, setUserInfo] = useState(null);
 
+  const refreshUser = () => {
+    setUserInfo(Object.assign({}, fbAuth.currentUser));
+  };
+
   useEffect(() => {
     onAuthStateChanged(fbAuth, (user) => {
       if (user) {
@@ -24,7 +28,7 @@ function App() {
 
   return (
     <div>
-      {loading ? `loading...` : <Router isLoggedIn={isLoggedIn} userInfo={userInfo} />}
+      {loading ? `loading...` : <Router refreshUser={refreshUser} isLoggedIn={isLoggedIn} userInfo={userInfo} />}
       <footer>&copy; {new Date().getFullYear()} Nwitter</footer>
     </div>
   );
